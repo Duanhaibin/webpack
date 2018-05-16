@@ -1,0 +1,25 @@
+.layer {
+  width: 100px;
+  height: 100px;
+  background: red;
+}
+.layer > div {
+  font-size: 42px;
+  background: green;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+html,body{
+    padding:0;
+    margin:0;
+    background: red;
+}
+ul li{
+    list-style: none;
+}
+.flex-div{
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+}

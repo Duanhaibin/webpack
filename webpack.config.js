@@ -1,5 +1,6 @@
 const htmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const config = {
     mode: "development",
     entry: './src/app.js',
@@ -21,30 +22,30 @@ const config = {
             },
             {
                 test: /\.less$/,
-                use: [
-                    {
-                        loader: "style-loader"
-                    }, {
-                        loader: "css-loader"
-                    },
-                    'postcss-loader',
-                    {
-                        loader: "less-loader"
-                    }
-                ]
+                use: ExtractTextPlugin.extract({
+                    fallback: "style-loader",
+                    use: [ "css-loader",
+
+                        'postcss-loader',
+                        {
+                            loader: "less-loader"
+                        }
+                    ]
+                })
             },
             {
                 test: /\.css$/,
                 exclude: /(node_modules)/,
-                use: [
-                    'style-loader', {
-                        loader: 'css-loader',
-                        options: {
-                            importLoaders: 1
-                        },
-                    },
-                    'postcss-loader'
-                ]
+                use: ExtractTextPlugin.extract({
+                    fallback: "style-loader",
+                    use: [{loader: 'css-loader',
+                            options: {
+                                importLoaders: 1
+                            }},
+                        'postcss-loader'
+                    ]
+                })
+
             },
 
         ]
@@ -52,7 +53,12 @@ const config = {
     plugins: [
         require('precss'),
         require('autoprefixer'),
-
+        new ExtractTextPlugin({
+            filename:  (getPath) => {
+                return getPath('css/[name]-[chunkhash].css').replace('css/js', 'css');
+            },
+            allChunks: true
+        }),
         new CleanWebpackPlugin(['dist']),
         new htmlWebpackPlugin({
             template: 'index.html'
