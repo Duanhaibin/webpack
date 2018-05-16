@@ -1,9 +1,14 @@
 const htmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const uglify = require('uglifyjs-webpack-plugin');
+
 const config = {
     mode: "development",
-    entry: './src/app.js',
+    entry: {
+        main:'./src/app.js',
+        qwe:'./src/components/layer/qwe.js'
+    },
     output: {
         filename: "js/[name]-[chunkhash].js",
         path: __dirname + '/dist'
@@ -53,6 +58,7 @@ const config = {
     plugins: [
         require('precss'),
         require('autoprefixer'),
+        new uglify(),
         new ExtractTextPlugin({
             filename:  (getPath) => {
                 return getPath('css/[name]-[chunkhash].css').replace('css/js', 'css');
